@@ -33,7 +33,7 @@ const Login = () => {
 
         <div className="mx-auto flex mt-60 ml-20">
           <form className="flex flex-col justify-items-start">
-            <h1 className="font-extrabold text-blue-700">
+            <h1 className="font-extrabold text-blue-600">
               <PersonIcon /> Login
             </h1>
             <input
@@ -50,10 +50,12 @@ const Login = () => {
               className="border border-black m-2 p-2 rounded-xl w-96"
             />
 
-            
+            <Link to={'/home'}>
             <button className="border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-24">
               Login
             </button>
+            </Link>
+           
             <hr/>
             <div className="flex items-center">
                 <Link to={'/sign-up'}>

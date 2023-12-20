@@ -3,10 +3,10 @@ import Feed from './Home/Feed';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Login from './Auth/Login';
 import {useTheme} from '../utils/ThemeContext'
-import WbSunnyRoundedIcon from '@material-ui/icons/WbSunnyRounded';
-import NightsStayRoundedIcon from '@material-ui/icons/NightsStayRounded';
 import SignUp from './Auth/SignUp';
-import Header from './Header';
+import Header from './Shared/Header';
+import UserProfile from './Profile/UserProfile';
+import SubHeader from './Shared/SubHeader';
 
 const Body = () => {
     const { theme, toggleTheme } = useTheme();
@@ -23,12 +23,16 @@ const Body = () => {
           path: "/home",
           element:<Feed />,
         },
+        {
+          path: "/user-profile",
+          element:<UserProfile />,
+        },
       ]);
 
   return (
     <div style={{ background: theme === 'light' ? '#fff' : '#333', color: theme === 'light' ? '#333' : '#fff' }} >
-        {/* <button className='mx-10 mt-2 text-right' onClick={toggleTheme}>{theme === 'light' ?<NightsStayRoundedIcon/> : <WbSunnyRoundedIcon/>}</button> */}
         <Header />
+        <SubHeader/>
         <RouterProvider router={appRouter} />
     </div>
   )

@@ -5,6 +5,7 @@ import { MONTHS, YEARS } from "../../utils/constant";
 import GenderSelection from "../Shared/GenderSelection";
 import CheckCircleOutlineOutlinedIcon from "@material-ui/icons/CheckCircleOutlineOutlined";
 import FiberManualRecordOutlinedIcon from "@material-ui/icons/FiberManualRecordOutlined";
+import LockIcon from '@material-ui/icons/Lock';
 
 const SignUp = () => {
   const { theme } = useTheme();
@@ -29,7 +30,7 @@ const SignUp = () => {
       <div className="flex justify-between ">
         <form className="absolute w-1/3 p-12 my-6 mx-auto right-0 left-0 shadow-lg rounded-lg bg-opacity-80">
           <h1 className="font-extrabold text-lg text-blue-700 text-center">
-            Create an Account
+            <LockIcon />Create an Account
           </h1>
           <p className="text-gray-400 text-center mx-2 px-2 mb-4">
             Its quick and Easy
