@@ -7,7 +7,7 @@ import ViewPosts from './Posts/ViewPosts'
 
 const Feed = () => {
   return (
-    <div className='flex  h-screen mt-8'>
+    <div className='flex mt-8'>
       <div className="w-1/2 md:w-1/3 lg:w-1/6 p-4 "></div>
         <div className="w-1/2 md:w-1/3 lg:w-1/6 p-4 ">
           <ClockSquare />

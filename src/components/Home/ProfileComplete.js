@@ -9,7 +9,7 @@ const ProfileComplete = () => {
         <h1 className='font-semibold '>Complete Your Profile</h1>
         </div>
         <div>
-        <h1 className='text-xs font-medium'>Your Profile is missing followings!</h1>
+        <h1 className='text-xs  font-extralight'>Your Profile is missing followings!</h1>
         </div>
         <div className='justify-between cursor-pointer hover:text-blue-600'>
             <h1 className='text-xs font-medium'>

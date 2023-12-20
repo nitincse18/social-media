@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 import CreatePost from './CreatePost'
+import RecentStories from './RecentStories';
+import ChatRooms from './ChatRooms';
 
 const ViewPosts = () => {
     const [activeButton, setActiveButton] = useState(0);
@@ -11,7 +13,7 @@ const ViewPosts = () => {
   };
 
   return (
-    <div>
+    <div className=''>
         <div>
         {buttonList.map((button, index) => (
           <button
@@ -28,6 +30,12 @@ const ViewPosts = () => {
 
       <div>
         <CreatePost />
+      </div>
+      <div>
+        <RecentStories />
+      </div>
+      <div>
+        <ChatRooms />
       </div>
        
     </div>
