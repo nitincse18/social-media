@@ -47,7 +47,7 @@ const ChatRooms = () => {
       </div> */}
         
         <div className="flex justify-between items-center mb-2">
-            <span className="font-semibold">Chat Rooms Video chat with friends</span>
+            <span className="font-semibold">Chat Rooms <span className='text-xs font-light'>Video chat with friends</span></span>
             <span className="text-blue-500 cursor-pointer">Create Room</span>
         </div>
 
