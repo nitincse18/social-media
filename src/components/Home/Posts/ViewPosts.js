@@ -10,14 +10,24 @@ import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 import CommentOutlinedIcon from '@material-ui/icons/CommentOutlined';
 import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import ScreenShareOutlinedIcon from '@material-ui/icons/ScreenShareOutlined';
+import CommentView from './CommentView';
 
 const ViewPosts = () => {
     const [activeButton, setActiveButton] = useState(0);
+    const [showComments, setShowComments] = useState(false);
+    const [comments] = useState([]);
 
   const buttonList = ['Home', 'Recent', 'Favourite'];
 
   const handleButtonClick = (index) => {
     setActiveButton(index);
+  };
+
+  const toggleComments = (postId) => {
+    setShowComments((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
   };
 
   return (
@@ -76,13 +86,13 @@ const ViewPosts = () => {
                     // <video width="750" height="500" controls >
                     //   <source src={post.mediaUrl} type="video/mp4"/>
                     // </video>
-                    <iframe width="440" height="300" src="https://www.youtube.com/embed/WVGChZZfvbQ?si=Nagt7kQ8un8tMLDY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe width="440" height="300" src={post.mediaUrl} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                   )
                 }
                 {
                  post.contentType=== 'text'  && (<hr className='mt-2'/>)
                 }
-                <div className='flex mt-8 text-green-400 text-xs '>
+                <div className='flex mt-8 text-green-400 text-xs mx-2'>
                   <div className="flex items-center mr-4">
                     <VisibilityOutlinedIcon fontSize='small'/>
                     <span className="ml-1 mb-3 text-black">10</span>
@@ -105,9 +115,15 @@ const ViewPosts = () => {
                 </div>
                 <div className='flex mt-2 '>
                   <button className='p-2 bg-gray-600 rounded-lg m-2 hover:bg-blue-400 cursor-pointer'><ThumbUpAltOutlinedIcon fontSize='small' />Like</button>
-                  <button className='p-2 bg-gray-600 rounded-lg m-2 hover:bg-blue-400 cursor-pointer'><CommentOutlinedIcon fontSize='small' />Comment</button>
+                  <button onClick={() => toggleComments(post.id)} className='p-2 bg-gray-600 rounded-lg m-2 hover:bg-blue-400 cursor-pointer'><CommentOutlinedIcon fontSize='small' />Comments</button>
                   <button className='p-2 bg-gray-600 rounded-lg m-2 hover:bg-blue-400 cursor-pointer'><ScreenShareOutlinedIcon fontSize='small' />Share</button>
+                </div>
 
+                <div >
+                  {/* <CommentView comments={post.reactions.comments} /> */}
+                  {showComments[post.id] && (
+                      <CommentView postId={post.id} comments={post.reactions.comments} />
+                    )}
                 </div>
               </div>
           </div>

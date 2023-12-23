@@ -3,10 +3,35 @@ import Slider from "./Slider";
 import PersonIcon from "@material-ui/icons/Person";
 import { useTheme } from "../../utils/ThemeContext";
 import { Link } from "react-router-dom";
+import { login } from '../../services/authService';
+import { useUser } from "../../utils/UserContext";
 
 const Login = () => {
   const { theme } = useTheme();
-  // const [isSignInForm, setIsSignInForm] = useState(true)
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  // const { login: userLogin } = useUser();
+
+  const handleLogin = async () => {
+    try {
+      const response = await login({ username, password });
+      console.log('Login successful:', response);
+      
+      // Assuming the login API returns user data
+      // const userData = response.data.user;
+     
+      // Update the user state
+      // userLogin(userData);
+
+      // Redirect the user to another page (you can use React Router)
+      // history.push('/home');
+    } catch (error) {
+      console.error('Login failed:', error);
+      // Handle login failure (display an error message, etc.)
+    }
+  };
+
+
   return (
     <div
       className="flex fixed w-full"
@@ -41,6 +66,7 @@ const Login = () => {
               type="text"
               placeholder="Email Address"
               className="border border-black m-2 p-2 rounded-xl w-96"
+              onChange={(e) => setUsername(e.target.value)}
             />
 
             <input
@@ -48,10 +74,11 @@ const Login = () => {
               type="password"
               placeholder="Password"
               className="border border-black m-2 p-2 rounded-xl w-96"
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             <Link to={'/home'}>
-            <button className="border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-24">
+            <button onClick={handleLogin} className="border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-24">
               Login
             </button>
             </Link>
