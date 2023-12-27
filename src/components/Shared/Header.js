@@ -1,15 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTheme } from "../../utils/ThemeContext";
 import WbSunnyRoundedIcon from "@material-ui/icons/WbSunnyRounded";
 import NightsStayRoundedIcon from "@material-ui/icons/NightsStayRounded";
 import HomeIcon from "@material-ui/icons/Home";
 import ChatIcon from "@material-ui/icons/Chat";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import { Link } from "react-router-dom";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, removeUser } from "../../utils/userSlice";
+import { logout } from '../../services/authService';
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const dispacth = useDispatch();
+  const user = useSelector(store => store.user);
+  console.log(user)
+
+  const handleSignout =async () => {
+    const response = await logout();
+    console.log('response', response)
+    dispacth(removeUser())
+    navigate('/')
+  };
+
+  const handleProfile = async (id) => {
+    // navigate('/user-profile')
+  }
+
+  useEffect(() => {
+    // const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { id, email, displayName, photoURL } = user;
+        dispacth(
+          addUser({
+            id: id,
+            email: email,
+            displayName: displayName,
+            photoURL: photoURL,
+          })
+        );
+        setIsLoggedIn(true)
+        navigate("/home");
+      } else {
+        // User is signed out
+        dispacth(removeUser());
+        navigate("/");
+      }
+    // });
+
+    // Unsubscribe when component unmounts
+    // return () => unsubscribe();
+  }, []);
 
   return (
     <div className="grid grid-flow-col  shadow-2xl justify-between">
@@ -36,29 +80,32 @@ const Header = () => {
       <div className="space-x-6 mx-14 mt-5 text-right flex col-span-1 justify-between">
         {isLoggedIn && (
             <>
-            {/* <Link to={'/user-profile'}> */}
             <div className="">
-              
-            <button className="w-10 h-10 border border-blue-500 rounded-full " >
-                <img
-                  src="https://avatars.githubusercontent.com/u/38283863?v=4"
-                  className="rounded-full h-10 w-10 "
-                  alt="Avatar"
-                />
-              </button>
-              
+             <Link to={'/user-profile'}>
+              <button  className="w-10 h-10 border border-blue-500 rounded-full " >
+                  <img
+                    src="https://avatars.githubusercontent.com/u/38283863?v=4"
+                    className="rounded-full h-10 w-10 "
+                    alt="Avatar"
+                  />
+                </button>
+              </Link> 
             </div>
-            {/* </Link> */}
+
            <div className="space-x-6 text-blue-600  ">
               
               <button className="w-10 h-10 border border-blue-500 rounded-full" ><HomeIcon /></button>
               <button className="w-10 h-10 border border-blue-500 rounded-full" ><ChatIcon /></button>
               <button className="w-10 h-10 border border-blue-500 rounded-full" ><NotificationsIcon /></button>
-              
+              <button onClick={handleSignout} className="w-10 h-10 border border-blue-500 rounded-full text-blue-600 cursor-pointer">
+                <ExitToAppIcon />
+              </button>
               
             </div>
             </>
           )}
+
+
           <div className=" ">
               <button
                 className="w-10 h-10 border border-blue-500 rounded-full text-blue-600"
@@ -71,7 +118,7 @@ const Header = () => {
                   )}
               </button>
           </div>
-        
+          
       </div>
 
     </div>

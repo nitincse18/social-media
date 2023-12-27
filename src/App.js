@@ -1,6 +1,5 @@
 // Import necessary dependencies
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Outlet } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import appStore from './utils/appStore';
 import Body from './components/Body';
@@ -9,7 +8,7 @@ import Body from './components/Body';
 const App = () => {
   return (
     <Provider store={appStore} > 
-      <Body />   
+      <Body />
     </Provider>
   );
 };

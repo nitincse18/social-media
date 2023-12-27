@@ -1,6 +1,6 @@
 import React from 'react'
 import Feed from './Home/Feed';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Login from './Auth/Login';
 import {useTheme} from '../utils/ThemeContext'
 import SignUp from './Auth/SignUp';
@@ -11,6 +11,7 @@ import SubHeader from './Shared/SubHeader';
 const Body = () => {
     const { theme, toggleTheme } = useTheme();
     const appRouter = createBrowserRouter([
+     
         {
           path: "/",
           element: <Login />,
@@ -22,17 +23,26 @@ const Body = () => {
         {
           path: "/home",
           element:<Feed />,
+          // children: [
+          //   {
+          //     path: "/home/user-profile",
+          //     element:<UserProfile />,
+              
+          //   }
+          // ]
         },
         {
-          path: "/user-profile",
+          path: "/user-profile/",
           element:<UserProfile />,
+          
         },
       ]);
 
   return (
     <div style={{ background: theme === 'light' ? '#fff' : '#333', color: theme === 'light' ? '#333' : '#fff' }} >
-        <Header />
-        <SubHeader/>
+        {/* <Header /> */}
+        {/* <SubHeader/> */}
+        <Outlet/>
         <RouterProvider router={appRouter} />
     </div>
   )

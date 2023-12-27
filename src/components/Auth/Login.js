@@ -2,37 +2,52 @@ import React, { useState } from "react";
 import Slider from "./Slider";
 import PersonIcon from "@material-ui/icons/Person";
 import { useTheme } from "../../utils/ThemeContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from '../../services/authService';
-import { useUser } from "../../utils/UserContext";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../utils/userSlice";
+import Header from "../Shared/Header";
+import { checkValidData } from "../../utils/validate";
+// import jwt from 'jsonwebtoken';
 
 const Login = () => {
   const { theme } = useTheme();
-  const [username, setUsername] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const { login: userLogin } = useUser();
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
 
-  const handleLogin = async () => {
+  // const message = checkValidData(email, password)
+  // setErrorMessage(message)
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    console.log('handleLogin', email, password)
     try {
-      const response = await login({ username, password });
-      console.log('Login successful:', response);
-      
+      const response = await login({ email, password });
+
       // Assuming the login API returns user data
-      // const userData = response.data.user;
-     
-      // Update the user state
-      // userLogin(userData);
+      const userData = response;
+      localStorage.setItem('token', JSON.stringify(response))
+      // const user = jwt.decode (userData)
+      dispatch(addUser(userData));
 
       // Redirect the user to another page (you can use React Router)
-      // history.push('/home');
+      navigate('/home');
     } catch (error) {
+
       console.error('Login failed:', error);
+      setErrorMessage(error.message)
       // Handle login failure (display an error message, etc.)
     }
   };
 
 
   return (
+    <div>
+      <Header />
+    
     <div
       className="flex fixed w-full"
       style={{
@@ -66,22 +81,23 @@ const Login = () => {
               type="text"
               placeholder="Email Address"
               className="border border-black m-2 p-2 rounded-xl w-96"
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <input
               // ref={password}
               type="password"
               placeholder="Password"
+              autoComplete="on"
               className="border border-black m-2 p-2 rounded-xl w-96"
               onChange={(e) => setPassword(e.target.value)}
             />
+            <p className="text-red-500 font-bold py-2">{errorMessage}</p>
 
-            <Link to={'/home'}>
             <button onClick={handleLogin} className="border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-24">
               Login
             </button>
-            </Link>
+
            
             <hr/>
             <div className="flex items-center">
@@ -94,44 +110,8 @@ const Login = () => {
         </div>
       </div>
     </div>
-    //     <div className={`flex flex-col lg:flex-row fixed w-full ${theme === 'light' ? 'bg-white' : 'bg-gray-800'} text-${theme === 'light' ? 'black' : 'white'}`}>
-    //     <div className="lg:w-1/6">
-    //       <button onClick={toggleTheme}>
-    //         {theme === 'light' ? <ToggleOffOutlinedIcon /> : <ToggleOnOutlinedIcon />}
-    //       </button>
-    //     </div>
-
-    //     <div className="lg:w-2/6">
-    //       {/* Responsive classes to make the Carousel smaller on small and medium screens */}
-    //       <div className="w-full md:w-2/3 lg:w-full">
-    //         <Slider />
-    //       </div>
-    //     </div>
-
-    //     <div className="lg:w-3/6 relative">
-    //       {/* Responsive margin for the form on small and medium screens */}
-    //       <div className="mx-auto mt-8 md:mt-16 lg:mt-60 lg:ml-20">
-    //         <form className="flex flex-col justify-items-start">
-    //           <h1 className="font-extrabold text-blue-700">
-    //             <PersonIcon /> Login
-    //           </h1>
-    //           <input
-    //             type="text"
-    //             placeholder="Email Address"
-    //             className="border border-black m-2 p-2 rounded-xl lg:w-96 md:48"
-    //           />
-
-    //           <input
-    //             type="password"
-    //             placeholder="Password"
-    //             className="border border-black m-2 p-2 rounded-xl lg:w-96"
-    //           />
-
-    //           <button className="border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-24">Login</button>
-    //         </form>
-    //       </div>
-    //     </div>
-    //   </div>
+   
+      </div>
   );
 };
 
