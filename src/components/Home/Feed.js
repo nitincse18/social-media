@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import ClockSquare from './ClockSquare'
 import ProfileComplete from './ProfileComplete'
 import Advertisment from './Advertisment'
@@ -6,8 +6,23 @@ import RecentBlogs from './RecentBlogs'
 import ViewPosts from './Posts/ViewPosts'
 import Header from '../Shared/Header'
 import { Outlet } from 'react-router-dom'
+import { useDispatch } from "react-redux";
+import {  useNavigate } from "react-router-dom";
 
 const Feed = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('token'));
+  console.log(user)
+
+  useEffect(() => {
+    if (user) {
+      navigate("/home");
+    } else {
+      navigate("/");
+    }
+
+}, []);
   return (
     <div>
       <Header/>

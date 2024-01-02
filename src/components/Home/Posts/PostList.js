@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { POSTS } from '../../../utils/constant';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineOutlined';
@@ -8,29 +8,41 @@ import CommentOutlinedIcon from '@material-ui/icons/CommentOutlined';
 import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import ScreenShareOutlinedIcon from '@material-ui/icons/ScreenShareOutlined';
 import CommentView from './CommentView';
+import { postList } from '../../../services/postService';
+import VideoPlayer from './VideoPlayer'
 
 const PostList = () => {
 
     const [showComments, setShowComments] = useState(false);
+    const [posts, setPosts] = useState([]);
     const toggleComments = (postId) => {
         setShowComments((prev) => ({
         ...prev,
         [postId]: !prev[postId],
         }));
     };
+
+    const getPostList =async () => {
+      const postRes = await postList();
+      setPosts(postRes)
+    }
+
+    useEffect(() => {
+      getPostList()
+    }, [])
   return (
     <div>
-        {POSTS.map(post =>(
+        {posts.map(post =>(
           <div className='h-auto flex flex-col rounded-md text-md mt-6 border bg-gray-100 p-1'>
               <div className='flex'>
                 <img 
-                src={post.userImage} 
+                src={post?.user?.image} 
                 alt=''
                 className='m-2 p-2 h-14 w-14 rounded-full'
                 />
                 <div className='flex flex-col'>
-                  <h1 className='mt-4 text-blue-400'>{post.userName}<span className='text-sm font-light text-black'> Post {post.contentType}</span> </h1>
-                  <p className='text-xs font-light text-gray-500'>{post.publishedDate}</p>
+                  <h1 className='mt-4 text-blue-400'>{post?.user?.first_name} {post?.user?.last_name}<span className='text-sm font-light text-black'> Post {post.contentType}</span> </h1>
+                  <p className='text-xs font-light text-gray-500'>{post.createAt}</p>
                 </div>
               </div>
               
@@ -48,7 +60,9 @@ const PostList = () => {
                     // <video width="750" height="500" controls >
                     //   <source src={post.mediaUrl} type="video/mp4"/>
                     // </video>
-                    <iframe width='100%' height="300" src={post.mediaUrl} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+                    <VideoPlayer video={post.mediaUrl} type={"video/mp4"} />
+                    // <iframe width='100%' height="300" src={post.mediaUrl} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                   )
                 }
                 {
@@ -84,7 +98,7 @@ const PostList = () => {
                 <div >
                   {/* <CommentView comments={post.reactions.comments} /> */}
                   {showComments[post.id] && (
-                      <CommentView postId={post.id} comments={post.reactions.comments} />
+                      <CommentView postId={post.id} comments={post?.comments} user={post.user} />
                     )}
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import VideoCallSharpIcon from "@material-ui/icons/VideoCallSharp";
@@ -9,13 +9,60 @@ import GifOutlinedIcon from '@material-ui/icons/GifOutlined';
 import LocalOfferOutlinedIcon from '@material-ui/icons/LocalOfferOutlined';
 import LinkOutlinedIcon from '@material-ui/icons/LinkOutlined';
 import LanguageOutlinedIcon from '@material-ui/icons/LanguageOutlined';
+import { createPost } from "../../../services/postService";
 
 const CreatePostForm = ({ fn }) => {
+  const [content, setContent] = useState('');
+  const [error, setError] = useState('');
+  const [title, setTitle] = useState('');
+  const [file, setFile] = useState(null);
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     console.log("Selected file:", selectedFile);
     // Add your file handling logic here
+    setFile(selectedFile);
   };
+
+  const handleSubmit =async (e) => {
+    e.preventDefault();
+    
+    // Check if the content is not empty before submitting
+    if (title.trim() === '') {
+      setError('Title cannot be empty');
+      return;
+    }
+    // if (content.trim() === '') {
+    //   setError('Content cannot be empty');
+    //   return;
+    // }
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('file', file, file?.name);
+    formData.append('content', content)
+    
+
+    if(file?.type?.includes('image')){
+      formData.append('contentType', 'image')
+    }
+    else if(file?.type?.includes('video')){
+      formData.append('contentType', 'video')
+    }else{
+      formData.append('contentType', 'text');
+    }
+ 
+
+    const post = await createPost(formData, file)
+    
+    // Reset the error state if there was a previous error
+    setError('');
+    
+    // Optionally, clear the form fields after submission
+    setContent('');
+    setTitle('');
+  };
+  
 
   return (
     <div className=" p-6 h-96 w-auto rounded shadow-md bg-white ">
@@ -38,10 +85,20 @@ const CreatePostForm = ({ fn }) => {
       <hr />
       <div className="flex">
         <div className="w-1/2 float-left">
-          <div className="grid grid-cols-2 gap-2">
-            <button className="p-2 m-2  bg-gray-300 hover:bg-blue-300 rounded-full text-xs">
+          <div className="grid grid-cols-2 gap-2 ">
+            {/* <button className="p-2 m-2  bg-gray-300 hover:bg-blue-300 rounded-full text-xs">
               <span className="text-green-500 text-xs"><PhotoLibraryIcon  /></span> Photo/Video
-            </button>
+            </button> */}
+            <label className="mt-4 w-full">
+              <input type="file" onChange={handleFileChange} accept="image/*" style={{display: 'none'}} />
+              <span className="p-2 m-2  bg-gray-300 hover:bg-blue-300 rounded-full text-xs">
+                <span className="text-green-500 text-xs">
+                  <PhotoLibraryIcon />
+                </span>{' '}
+                Photo/Video
+              </span>
+            </label>
+
             <button className="p-2 m-2  bg-gray-300 hover:bg-blue-300 rounded-full text-xs">
               <span className="text-green-500"><LocationOnOutlinedIcon/></span> Post Location
             </button>
@@ -69,7 +126,7 @@ const CreatePostForm = ({ fn }) => {
               <input
                 type="file"
                 className="className='h-40 w-40 px-2  m-2 text-sm border-2 border-blue-500"
-                onChange={handleFileChange}
+                // onChange={handleFileChange}
               />
             </label>
           </div>
@@ -77,11 +134,25 @@ const CreatePostForm = ({ fn }) => {
 
         <div className="w-1/2 flex flex-col relative">
           <input
+              type="text"
+              placeholder="Post Title"
+              className="h-10 w-96 px-2  m-2 text-sm border-2 border-blue-500"
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
+              required
+            />
+          <input
             type="text"
             placeholder="What's on your mind?"
             className="h-28 w-96 px-2  m-2 text-sm border-2 border-blue-500"
+            onChange={(e) => setContent(e.target.value)}
+            value={content}
           />
-          <button className="border-2 border-blue-400 bg-blue-400 rounded-xl absolute bottom-2 right-2 w-1/2 p-2 ">Publish</button>
+          {error && <p className="text-red-600 m-2" >{error}</p>}
+          <button 
+            className="border-2 border-blue-400 bg-blue-400 rounded-xl absolute bottom-2 right-2 w-1/2 p-2 "
+            onClick={handleSubmit}
+          >Publish</button>
         </div>
       </div>
     </div>

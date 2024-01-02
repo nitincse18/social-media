@@ -16,7 +16,7 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const dispacth = useDispatch();
-  const user = useSelector(store => store.user);
+  const user = JSON.parse(localStorage.getItem('token'));
   console.log(user)
 
   const handleSignout =async () => {
@@ -31,7 +31,6 @@ const Header = () => {
   }
 
   useEffect(() => {
-    // const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const { id, email, displayName, photoURL } = user;
         dispacth(
@@ -43,16 +42,13 @@ const Header = () => {
           })
         );
         setIsLoggedIn(true)
-        navigate("/home");
+        // navigate("/home");
       } else {
         // User is signed out
         dispacth(removeUser());
-        navigate("/");
+        // navigate("/");
       }
-    // });
 
-    // Unsubscribe when component unmounts
-    // return () => unsubscribe();
   }, []);
 
   return (
@@ -78,10 +74,10 @@ const Header = () => {
       </div>
 
       <div className="space-x-6 mx-14 mt-5 text-right flex col-span-1 justify-between">
-        {isLoggedIn && (
+        {user && (
             <>
             <div className="">
-             <Link to={'/user-profile'}>
+             <Link to={'/user-profile/'+ user.id}>
               <button  className="w-10 h-10 border border-blue-500 rounded-full " >
                   <img
                     src="https://avatars.githubusercontent.com/u/38283863?v=4"
@@ -93,8 +89,9 @@ const Header = () => {
             </div>
 
            <div className="space-x-6 text-blue-600  ">
-              
+              <Link to={'/'}>
               <button className="w-10 h-10 border border-blue-500 rounded-full" ><HomeIcon /></button>
+              </Link>
               <button className="w-10 h-10 border border-blue-500 rounded-full" ><ChatIcon /></button>
               <button className="w-10 h-10 border border-blue-500 rounded-full" ><NotificationsIcon /></button>
               <button onClick={handleSignout} className="w-10 h-10 border border-blue-500 rounded-full text-blue-600 cursor-pointer">

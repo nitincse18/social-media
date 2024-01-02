@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useSelector } from "react";
 import Slider from "./Slider";
 import PersonIcon from "@material-ui/icons/Person";
 import { useTheme } from "../../utils/ThemeContext";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from '../../services/authService';
 import { useDispatch } from "react-redux";
-import { addUser } from "../../utils/userSlice";
+import { addUser, removeUser } from "../../utils/userSlice";
 import Header from "../Shared/Header";
 import { checkValidData } from "../../utils/validate";
 // import jwt from 'jsonwebtoken';
@@ -15,15 +15,15 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  // const user = useSelector(store => store.user);
+  const user = localStorage.getItem('token')
 
-  // const message = checkValidData(email, password)
-  // setErrorMessage(message)
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log('handleLogin', email, password)
     try {
       const response = await login({ email, password });
 
@@ -42,6 +42,18 @@ const Login = () => {
       // Handle login failure (display an error message, etc.)
     }
   };
+
+  useEffect(() => {
+    if (user) {     
+      setIsLoggedIn(true)
+      navigate("/home");
+    } else {
+      // User is signed out
+      dispatch(removeUser());
+      navigate("/");
+    }
+
+}, []);
 
 
   return (

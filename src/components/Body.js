@@ -32,7 +32,7 @@ const Body = () => {
           // ]
         },
         {
-          path: "/user-profile/",
+          path: "/user-profile/:id",
           element:<UserProfile />,
           
         },
