@@ -7,6 +7,7 @@ import SignUp from './Auth/SignUp';
 import Header from './Shared/Header';
 import UserProfile from './Profile/UserProfile';
 import SubHeader from './Shared/SubHeader';
+import Pictures from './Profile/Pictures';
 
 const Body = () => {
     const { theme, toggleTheme } = useTheme();
@@ -23,19 +24,16 @@ const Body = () => {
         {
           path: "/home",
           element:<Feed />,
-          // children: [
-          //   {
-          //     path: "/home/user-profile",
-          //     element:<UserProfile />,
-              
-          //   }
-          // ]
         },
         {
-          path: "/user-profile/:id",
+          path: "/user-profile/:id/posts",
           element:<UserProfile />,
           
         },
+        // {
+        //   path: "/user-profile/:id/pictures",
+        //   element:<Pictures />,
+        // },
       ]);
 
   return (

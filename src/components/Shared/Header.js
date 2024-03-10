@@ -77,7 +77,7 @@ const Header = () => {
         {user && (
             <>
             <div className="">
-             <Link to={'/user-profile/'+ user.id}>
+             <Link to={'/user-profile/'+ user.id+ '/posts'}>
               <button  className="w-10 h-10 border border-blue-500 rounded-full " >
                   <img
                     src="https://avatars.githubusercontent.com/u/38283863?v=4"
