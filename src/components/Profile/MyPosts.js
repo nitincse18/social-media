@@ -7,7 +7,7 @@ const MyPosts = () => {
   return (
     <div>
       <div className="mt-10">
-        <AboutMe />
+        {/* <AboutMe /> */}
       </div>
 
       <div className="mt-10">

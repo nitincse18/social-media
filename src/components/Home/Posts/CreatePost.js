@@ -17,7 +17,7 @@ const CreatePost = () => {
   return (
     <div className='h-36 mt-6 rounded-md border p-2 bg-gray-100'>
         <div className=''>
-            <h1 className='ml-1 font-semibold'>Create New Post</h1>
+            <h1 className='ml-1 font-bold'>Create New Post</h1>
             <input 
             type="text"
             placeholder="Create New Post"

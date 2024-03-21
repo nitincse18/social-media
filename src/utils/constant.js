@@ -306,4 +306,6 @@ export const MONTHS = [
       }
     }
   ]
+
+  export const DEFAULT_PROFILE_IMAGE = 'https://cdn2.vectorstock.com/i/1000x1000/92/16/default-profile-picture-avatar-user-icon-vector-46389216.jpg'
   

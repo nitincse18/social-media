@@ -8,6 +8,8 @@ import Header from './Shared/Header';
 import UserProfile from './Profile/UserProfile';
 import SubHeader from './Shared/SubHeader';
 import Pictures from './Profile/Pictures';
+import Chat from './Shared/Chat';
+import Friends from './Friends/Friends';
 
 const Body = () => {
     const { theme, toggleTheme } = useTheme();
@@ -34,6 +36,14 @@ const Body = () => {
         //   path: "/user-profile/:id/pictures",
         //   element:<Pictures />,
         // },
+        {
+          path: 'chat',
+          element: <Chat />
+        },
+        {
+          path: 'friends',
+          element: <Friends />
+        },
       ]);
 
   return (

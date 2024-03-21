@@ -12,6 +12,7 @@ import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import ScreenShareOutlinedIcon from '@material-ui/icons/ScreenShareOutlined';
 import CommentView from './CommentView';
 import PostList from './PostList';
+import RecommendedFriend from './RecommendedFriend';
 
 const ViewPosts = () => {
     const [activeButton, setActiveButton] = useState(0);
@@ -54,7 +55,7 @@ const ViewPosts = () => {
         <RecentStories />
       </div>
       <div>
-        <ChatRooms />
+        <RecommendedFriend />
       </div>
 
 

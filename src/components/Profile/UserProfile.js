@@ -71,9 +71,9 @@ const UserProfile = () => {
 
       <div className="mx-auto max-w-screen-xl">
         <div className="flex flex-col md:flex-row mt-8">
-        <div className="w-full md:w-1/4 p-4"></div>
+        <div className="w-full md:w-1/6 p-4"></div>
           {/* First part - Header, Cover Photo, User Info, Button List */}
-          <div className="w-full md:w-1/2 p-4">
+          <div className="w-full md:w-4/6 p-4">
             <div className="relative">
               <div className="relative object-cover">
                 <img
@@ -81,29 +81,29 @@ const UserProfile = () => {
                   alt="cover-img"
                   className="h-80 w-full object-cover rounded-lg"
                 />
-                <p className='absolute top-60 right-80'><CreateIcon /></p>
+                {/* <p className='absolute top-60 right-80'><CreateIcon /></p> */}
               </div>
               <img
                 src={userData.image}
                 alt={`user's profile`}
                 className="absolute top-0 left-0 rounded-full w-28 h-28 object-cover border-2 border-white  mt-48 ml-6"
               />
-              <button className="absolute top-72 left-36 text-center rounded-full w-16  object-cover border-2 border-white bg-green-900 ml-96">
+              {/* <button className="absolute top-72 left-36 text-center rounded-full w-16  object-cover border-2 border-white bg-green-900 ml-96">
                 Follow
-              </button>
+              </button> */}
             
             </div>
 
             <div className="flex justify-between mt-2">
-              <h1 className="font-bold w-5/12">
+              <h1 className="font-bold w-5/12 text-lg text-blue-700">
                 {userData.first_name} {userData.last_name}
               </h1>
 
               <div className="flex w-7/12 justify-between mx-2">
-                <p>Joined: {userData.joined}</p>
-                <p>Follow: 55K</p>
-                <p>Followers: 2.2K</p>
-                <p>Posts: {userData.postCount}</p>
+                <p className='font-semibold'>Joined: <span className='text-blue-700'>{userData.joined}</span></p>
+                <p className='font-semibold'>Follow: <span className='text-blue-700'>55K</span></p>
+                <p className='font-semibold'>Followers: <span className='text-blue-700'>2.2k</span></p>
+                <p className='font-semibold'>Posts: <span className='text-blue-700'>{userData.postCount}</span></p>
               </div>
              
             </div>
@@ -164,7 +164,7 @@ const UserProfile = () => {
             {activeButton === 1 && <Pictures user_id={id} />}
             {activeButton === 2 && <Videos user_id={id} />}
             {activeButton === 3 && <Friends user_id={id} />}
-            {/* {activeButton === 4 && <About />} */}
+            {activeButton === 4 && <AboutMe user={userData} />}
           </div>
           </div>
 

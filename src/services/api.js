@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:4000';
+const BASE_URL = 'https://social-media-api-production-6a0e.up.railway.app';
 
 const api = (endpoint, options = {}) => {
   const url = `${BASE_URL}${endpoint}`;
@@ -15,5 +15,4 @@ const api = (endpoint, options = {}) => {
       throw error;
     });
 };
-
 export default api;

@@ -55,6 +55,8 @@ const Header = () => {
     <div className="grid grid-flow-col  shadow-2xl justify-between">
       <div className="flex col-span-1">
 
+      <Link to={'/'}>
+        <div className="flex">
         <img
           className="w-16 h-16 mt-1 ml-8 bg-woman-img bg-center opacity-120"
           src={theme === "light" ? "/logo1.png" : "/logo-white.png"}
@@ -63,8 +65,10 @@ const Header = () => {
         <h1 className="font-extrabold text-2xl mt-6 ">
           <span>Social </span> <span className="text-yellow-500">Nexus</span>
         </h1>
-
-        {
+        </div>
+        
+      </Link>
+        {user &&
           <input
             type="text"
             className="w-56 h-8 mt-6 border border-gray-500 rounded-2xl ml-4 p-2"
@@ -89,9 +93,6 @@ const Header = () => {
             </div>
 
            <div className="space-x-6 text-blue-600  ">
-              <Link to={'/'}>
-              <button className="w-10 h-10 border border-blue-500 rounded-full" ><HomeIcon /></button>
-              </Link>
               <button className="w-10 h-10 border border-blue-500 rounded-full" ><ChatIcon /></button>
               <button className="w-10 h-10 border border-blue-500 rounded-full" ><NotificationsIcon /></button>
               <button onClick={handleSignout} className="w-10 h-10 border border-blue-500 rounded-full text-blue-600 cursor-pointer">
