@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import VideoCallSharpIcon from "@material-ui/icons/VideoCallSharp";
@@ -10,12 +10,16 @@ import LocalOfferOutlinedIcon from '@material-ui/icons/LocalOfferOutlined';
 import LinkOutlinedIcon from '@material-ui/icons/LinkOutlined';
 import LanguageOutlinedIcon from '@material-ui/icons/LanguageOutlined';
 import { createPost } from "../../../services/postService";
+import toast from "react-hot-toast";
+import { postList } from "../../../services/postService";
 
-const CreatePostForm = ({ fn }) => {
+const CreatePostForm = ({ fn, sendDataToParent }) => {
   const [content, setContent] = useState('');
   const [error, setError] = useState('');
   const [title, setTitle] = useState('');
   const [file, setFile] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [newPost, setNewPost] = useState({title:'', file: '', contentType: '', content: ''});
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -29,7 +33,7 @@ const CreatePostForm = ({ fn }) => {
     
     // Check if the content is not empty before submitting
     if (title.trim() === '') {
-      setError('Title cannot be empty');
+      toast.error('Title cannot be empty');
       return;
     }
     // if (content.trim() === '') {
@@ -53,15 +57,25 @@ const CreatePostForm = ({ fn }) => {
     }
  
 
-    const post = await createPost(formData, file)
-    
+    const newPost = await createPost(formData, file)
+    const updatedList= [...posts, {title: newPost.title, content: newPost.content, contentType: newPost.contentType, file: newPost.file}]
     // Reset the error state if there was a previous error
     setError('');
     
     // Optionally, clear the form fields after submission
     setContent('');
     setTitle('');
+    sendDataToParent(false)
   };
+
+  const getPostList = async () => {
+    const postRes = await postList();
+    setPosts(postRes);
+  };
+
+  useEffect(() => {
+    getPostList();
+  }, []);
   
 
   return (
@@ -89,34 +103,37 @@ const CreatePostForm = ({ fn }) => {
             {/* <button className="p-2 m-2  bg-gray-300 hover:bg-blue-300 rounded-full text-xs">
               <span className="text-green-500 text-xs"><PhotoLibraryIcon  /></span> Photo/Video
             </button> */}
+            <div className="">
             <label className="mt-4 w-full">
               <input type="file" onChange={handleFileChange} accept="image/*" style={{display: 'none'}} />
-              <span className="p-2 m-2  bg-gray-300 hover:bg-blue-300 rounded-full text-xs">
+              <p className="p-2 m-2 bg-gray-300 cursor-pointer hover:bg-blue-300 rounded-full text-xs">
                 <span className="text-green-500 text-xs">
-                  <PhotoLibraryIcon />
+                  <PhotoLibraryIcon fontSize="small" />
                 </span>{' '}
                 Photo/Video
-              </span>
+              </p>
             </label>
+            </div>
+            
 
             <button className="p-2 m-2  bg-gray-300 hover:bg-blue-300 rounded-full text-xs">
-              <span className="text-green-500"><LocationOnOutlinedIcon/></span> Post Location
+              <span className="text-green-500"><LocationOnOutlinedIcon fontSize="small" /></span> Post Location
             </button>
           </div>
           <div className="grid grid-cols-2 gap-2">
             <button className=" p-2 m-2 bg-gray-300 hover:bg-blue-300 rounded-full text-sm">
-              <span className="text-green-500"><GifOutlinedIcon/></span> Post Gif
+              <span className="text-green-500"><GifOutlinedIcon f /></span> Post Gif
             </button>
             <button className="p-2 m-2  bg-gray-300 hover:bg-blue-300 rounded-full text-sm">
-              <span className="text-green-500"><LocalOfferOutlinedIcon/></span> Tag to Friend
+              <span className="text-green-500"><LocalOfferOutlinedIcon fontSize="small" /></span> Tag to Friend
             </button>
           </div>
           <div className="grid grid-cols-2 gap-2">
             <button className=" p-2 m-2 bg-gray-300 hover:bg-blue-300 rounded-full text-sm">
-              <span className="text-green-500"><LinkOutlinedIcon/></span> Share Link
+              <span className="text-green-500"><LinkOutlinedIcon fontSize="small" /></span> Share Link
             </button>
             <button className="p-2 m-2  bg-gray-300 hover:bg-blue-300 rounded-full text-sm">
-              <span className="text-green-500"><LanguageOutlinedIcon /></span> Post as Ad
+              <span className="text-green-500"><LanguageOutlinedIcon fontSize="small" /></span> Post as Ad
             </button>
           </div>
 

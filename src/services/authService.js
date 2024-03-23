@@ -27,7 +27,7 @@ export const login = async (credentials) => {
       },
       body: JSON.stringify(credentials),
     });
-    console.log('response',response)
+    console.log('response-----',response)
     return response;
   } catch (error) {
     console.log(error)

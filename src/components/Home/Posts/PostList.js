@@ -9,6 +9,7 @@ import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
 import CommentView from "./CommentView";
 import { postList } from "../../../services/postService";
 import VideoPlayer from "./VideoPlayer";
+import { DEFAULT_PROFILE_IMAGE } from "../../../utils/constant";
 
 const PostList = () => {
   const [showComments, setShowComments] = useState(false);
@@ -34,7 +35,7 @@ const PostList = () => {
         <div className="h-auto flex flex-col rounded-md text-md mt-6 border bg-gray-100 p-1">
           <div className="flex">
             <img
-              src={post?.user?.image}
+              src={post?.user?.image || DEFAULT_PROFILE_IMAGE}
               alt=""
               className="m-2 p-2 h-14 w-14 rounded-full"
             />

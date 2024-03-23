@@ -6,7 +6,10 @@ const api = (endpoint, options = {}) => {
   return fetch(url, options)
     .then((response) => {
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if(response.status === 401) {
+          throw new Error(`Invalid Credentials😔`);
+        }
+        
       }
       return response.json();
     })
@@ -16,3 +19,5 @@ const api = (endpoint, options = {}) => {
     });
 };
 export default api;
+
+

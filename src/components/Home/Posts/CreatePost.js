@@ -30,7 +30,7 @@ const CreatePost = () => {
 
             {isPopupOpen && (
               <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-500 bg-opacity-70 z-20">
-                 <CreatePostForm fn={closePopup} />
+                 <CreatePostForm fn={closePopup} sendDataToParent={()=>setPopupOpen(false)}  />
               </div>
             )}
         </div>

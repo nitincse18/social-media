@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../../utils/userSlice";
 import Header from "../Shared/Header";
 import { checkValidData } from "../../utils/validate";
+import toast from "react-hot-toast";
 // import jwt from 'jsonwebtoken';
 
 const Login = () => {
@@ -25,7 +26,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await login({ email, password });
-
+      console.log('response',response)
       // Assuming the login API returns user data
       const userData = response;
       localStorage.setItem("token", JSON.stringify(response));
@@ -34,9 +35,11 @@ const Login = () => {
 
       // Redirect the user to another page (you can use React Router)
       navigate("/home");
+      toast.success('LoggedIn Successfully🤩')
     } catch (error) {
-      console.error("Login failed:", error);
-      setErrorMessage(error.message);
+      console.error("Login failed:", error.status);
+      // setErrorMessage(error.message);
+      toast.error(error.message)
       // Handle login failure (display an error message, etc.)
     }
   };
@@ -102,17 +105,20 @@ const Login = () => {
               />
               <p className="text-red-500 font-bold py-2">{errorMessage}</p>
 
-              <button
+            <div className="flex justify-end">
+            <button
                 onClick={handleLogin}
-                className="border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-24"
+                className=" border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-24 hover:bg-blue-600"
               >
                 Login
               </button>
+            </div>
+              
 
               <hr />
               <div className="flex items-center">
                 <Link to={"/sign-up"}>
-                  <button className="border border-green-950 rounded-xl mx-24 my-2 p-2 bg-green-400 w-48 ">
+                  <button className="border border-green-950 rounded-xl mx-24 my-2 p-2 bg-green-400 w-48 hover:bg-green-700">
                     Create Account
                   </button>
                 </Link>
