@@ -13,17 +13,15 @@ import { createPost } from "../../../services/postService";
 import toast from "react-hot-toast";
 import { postList } from "../../../services/postService";
 
-const CreatePostForm = ({ fn, sendDataToParent }) => {
+const CreatePostForm = ({ fn, sendDataToParent, onAddPost  }) => {
   const [content, setContent] = useState('');
   const [error, setError] = useState('');
   const [title, setTitle] = useState('');
   const [file, setFile] = useState(null);
-  const [posts, setPosts] = useState([]);
-  const [newPost, setNewPost] = useState({title:'', file: '', contentType: '', content: ''});
+
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    console.log("Selected file:", selectedFile);
     // Add your file handling logic here
     setFile(selectedFile);
   };
@@ -58,7 +56,9 @@ const CreatePostForm = ({ fn, sendDataToParent }) => {
  
 
     const newPost = await createPost(formData, file)
-    const updatedList= [...posts, {title: newPost.title, content: newPost.content, contentType: newPost.contentType, file: newPost.file}]
+    // const updatedList= [...posts, newPost]
+    // console.log('updatedList', updatedList)
+    onAddPost(newPost)
     // Reset the error state if there was a previous error
     setError('');
     
@@ -68,14 +68,14 @@ const CreatePostForm = ({ fn, sendDataToParent }) => {
     sendDataToParent(false)
   };
 
-  const getPostList = async () => {
-    const postRes = await postList();
-    setPosts(postRes);
-  };
+  // const getPostList = async () => {
+  //   const postRes = await postList();
+  //   setPosts(postRes);
+  // };
 
-  useEffect(() => {
-    getPostList();
-  }, []);
+  // useEffect(() => {
+  //   getPostList();
+  // }, [posts]);
   
 
   return (

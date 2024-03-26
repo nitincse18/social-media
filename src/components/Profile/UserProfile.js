@@ -7,12 +7,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import AboutMe from './AboutMe';
 import MyPosts from './MyPosts';
-import CreatePost from '../Home/Posts/CreatePost';
 import { getUserById } from '../../services/userService';
 import Pictures from './Pictures';
 import Videos from './Videos';
 import Friends from './Friends';
-import CreateIcon from '@material-ui/icons/Create';
+import { DEFAULT_PROFILE_IMAGE } from '../../utils/constant';
 
 const UserProfile = () => {
   // State to manage the active button and user data
@@ -84,7 +83,7 @@ const UserProfile = () => {
                 {/* <p className='absolute top-60 right-80'><CreateIcon /></p> */}
               </div>
               <img
-                src={userData.image}
+                src={userData.image || DEFAULT_PROFILE_IMAGE}
                 alt={`user's profile`}
                 className="absolute top-0 left-0 rounded-full w-28 h-28 object-cover border-2 border-white  mt-48 ml-6"
               />

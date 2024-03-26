@@ -37,8 +37,8 @@ const Carosuel = ({ slides, autoplayInterval = 2500 }) => {
             transform: `translateX(-${current * 100}%)`,
           }}
         >
-          {slides.map((s) => {
-            return <img className="h-screen p-2 " src={s} alt="slider-img" />;
+          {slides.map((s, index) => {
+            return <img className="h-screen p-2 " src={s} alt="slider-img" key={index} />;
           })}
         </div>
 

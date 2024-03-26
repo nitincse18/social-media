@@ -1,5 +1,6 @@
 // services/authService.js
 import api from './api';
+import { jwtDecode } from 'jwt-decode'
 
 export const signup = async (userData) => {
   try {
@@ -27,7 +28,7 @@ export const login = async (credentials) => {
       },
       body: JSON.stringify(credentials),
     });
-    console.log('response-----',response)
+
     return response;
   } catch (error) {
     console.log(error)
@@ -38,7 +39,7 @@ export const login = async (credentials) => {
 export const logout = async () => {
      
      const user = JSON.parse(localStorage.getItem('token'))
-     console.log("user token", user.token) 
+    //  console.log("user token", user.token) 
     try {
       const response = await api('/auth/logout', {
         method: 'GET',
@@ -49,7 +50,9 @@ export const logout = async () => {
         // body: JSON.stringify(),
       });
       localStorage.clear();
-      return response;
+      var decoded = jwtDecode(user.token);
+      console.log('decoded', decoded);
+      return decoded.id;
     } catch (error) {
       console.log('Error logout', error)
       throw error;

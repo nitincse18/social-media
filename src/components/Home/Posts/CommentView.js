@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SendIcon from "@material-ui/icons/Send";
 import { createComment } from "../../../services/postService";
+import { DEFAULT_PROFILE_IMAGE } from "../../../utils/constant";
 
 const CommentView = ({postId, comments, user}) => {
   const [content, setContent] = useState('');
@@ -43,7 +44,7 @@ const CommentView = ({postId, comments, user}) => {
             comments.map(comment=> (
                 <div className="flex my-1">
                     <img 
-                    src={user.image} 
+                    src={user.image || DEFAULT_PROFILE_IMAGE} 
                     alt=''
                     className='m-2 p-2 h-14 w-14 rounded-full'
                     />
@@ -54,7 +55,7 @@ const CommentView = ({postId, comments, user}) => {
                 </div>
             ))
         }
-                
+
       </div>
     </div>
   );

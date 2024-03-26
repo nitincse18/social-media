@@ -7,9 +7,15 @@ import { login } from "../../services/authService";
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../../utils/userSlice";
 import Header from "../Shared/Header";
-import { checkValidData } from "../../utils/validate";
+import { io } from "socket.io-client";
 import toast from "react-hot-toast";
+import { loginForm } from "./validation/auth";
+import { socket } from "../Shared/socket/socketConfig";
 // import jwt from 'jsonwebtoken';
+// const socket = io("http://localhost:5000", { autoConnect: false });
+
+import { getOnlineUsers, addOnlineUsers } from "../../utils/globals";
+
 
 const Login = () => {
   const { theme } = useTheme();
@@ -17,6 +23,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const  [onlineUsers, setOnlineUsers] = [];
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const user = useSelector(store => store.user);
@@ -25,27 +32,43 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      const loginFormValidMsg = loginForm({ email, password });
+      if (loginFormValidMsg) {
+        return toast.error(loginFormValidMsg);
+      }
+
       const response = await login({ email, password });
-      console.log('response',response)
-      // Assuming the login API returns user data
+
       const userData = response;
       localStorage.setItem("token", JSON.stringify(response));
-      // const user = jwt.decode (userData)
-      dispatch(addUser(userData));
 
-      // Redirect the user to another page (you can use React Router)
+      dispatch(addUser(userData));
+      
       navigate("/home");
-      toast.success('LoggedIn Successfully🤩')
+      toast.success("LoggedIn Successfully.🤩");
+    
+
+      socket.connect();
+      socket.on("connect", async () => {
+        console.log(`Socket ${userData.id} connected`);
+        
+        // if(!onlineUsers.some((user) => userData.id === newUserId))
+        // addOnlineUsers(userData.id)
+        // setOnlineUsers(userData.id)
+        // io.emit('get-users', onlineUsers)
+      });
+     
     } catch (error) {
       console.error("Login failed:", error.status);
-      // setErrorMessage(error.message);
-      toast.error(error.message)
-      // Handle login failure (display an error message, etc.)
+      toast.error(error.message);
     }
   };
 
+
+
   useEffect(() => {
     if (user) {
+      
       setIsLoggedIn(true);
       navigate("/home");
     } else {
@@ -57,7 +80,7 @@ const Login = () => {
 
   return (
     <div>
-      <Header />
+      <Header  />
 
       <div
         className="flex fixed w-full"
@@ -90,7 +113,8 @@ const Login = () => {
               <input
                 // ref={email}
                 type="text"
-                placeholder="Email Address"
+                placeholder="Email Address *"
+                required
                 className="border border-black m-2 p-2 rounded-xl w-96"
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -98,22 +122,22 @@ const Login = () => {
               <input
                 // ref={password}
                 type="password"
-                placeholder="Password"
+                placeholder="Password *"
                 autoComplete="on"
+                required
                 className="border border-black m-2 p-2 rounded-xl w-96"
                 onChange={(e) => setPassword(e.target.value)}
               />
               <p className="text-red-500 font-bold py-2">{errorMessage}</p>
 
-            <div className="flex justify-end">
-            <button
-                onClick={handleLogin}
-                className=" border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-24 hover:bg-blue-600"
-              >
-                Login
-              </button>
-            </div>
-              
+              <div className="flex justify-end">
+                <button
+                  onClick={handleLogin}
+                  className=" border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-24 hover:bg-blue-600"
+                >
+                  Login
+                </button>
+              </div>
 
               <hr />
               <div className="flex items-center">

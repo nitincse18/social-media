@@ -65,7 +65,7 @@ function RecommendedFriend() {
         </button>
 
         {suggested.slice(currentIndex, currentIndex + 4).map((suggs, index) => (
-          <div className="flex flex-1 flex-col items-center justify-around h-52 ">
+          <div className="flex flex-1 flex-col items-center justify-around h-52 " key={index}>
             <img 
               src={suggs.image || DEFAULT_PROFILE_IMAGE}
               alt={`${suggs.first_name}'s image`}

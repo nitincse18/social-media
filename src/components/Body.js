@@ -10,9 +10,14 @@ import SubHeader from './Shared/SubHeader';
 import Pictures from './Profile/Pictures';
 import Chat from './Shared/Chat';
 import Friends from './Friends/Friends';
+import ChatLayout from './Chat/ChatLayout';
+
+
+
 
 const Body = () => {
     const { theme, toggleTheme } = useTheme();
+
     const appRouter = createBrowserRouter([
      
         {
@@ -37,8 +42,8 @@ const Body = () => {
         //   element:<Pictures />,
         // },
         {
-          path: 'chat',
-          element: <Chat />
+          path: '/chat/:userId',
+          element: <ChatLayout  />
         },
         {
           path: 'friends',
@@ -50,6 +55,7 @@ const Body = () => {
     <div style={{ background: theme === 'light' ? '#fff' : '#333', color: theme === 'light' ? '#333' : '#fff' }} >
         {/* <Header /> */}
         {/* <SubHeader/> */}
+        {/* <ChatLayout /> */}
         <Outlet/>
         <RouterProvider router={appRouter} />
     </div>

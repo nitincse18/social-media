@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useTheme } from "../../utils/ThemeContext";
 import WbSunnyRoundedIcon from "@material-ui/icons/WbSunnyRounded";
 import NightsStayRoundedIcon from "@material-ui/icons/NightsStayRounded";
-import HomeIcon from "@material-ui/icons/Home";
 import ChatIcon from "@material-ui/icons/Chat";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -10,6 +9,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../../utils/userSlice";
 import { logout } from '../../services/authService';
+import { socket } from "./socket/socketConfig";
+import { removeOnlineUser } from "../../utils/globals";
+import { DEFAULT_PROFILE_IMAGE } from "../../utils/constant";
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
@@ -17,13 +19,13 @@ const Header = () => {
   const navigate = useNavigate();
   const dispacth = useDispatch();
   const user = JSON.parse(localStorage.getItem('token'));
-  console.log(user)
 
   const handleSignout =async () => {
     const response = await logout();
-    console.log('response', response)
     dispacth(removeUser())
+    removeOnlineUser(response)
     navigate('/')
+    
   };
 
   const handleProfile = async (id) => {
@@ -44,8 +46,11 @@ const Header = () => {
         setIsLoggedIn(true)
         // navigate("/home");
       } else {
-        // User is signed out
+        socket.on("disconnect", () => { // Fire when socket is disconnected
+          console.log("Socket disconnected");
+        });
         dispacth(removeUser());
+       
         // navigate("/");
       }
 
@@ -84,7 +89,7 @@ const Header = () => {
              <Link to={'/user-profile/'+ user.id+ '/posts'}>
               <button  className="w-10 h-10 border border-blue-500 rounded-full " >
                   <img
-                    src="https://avatars.githubusercontent.com/u/38283863?v=4"
+                    src={user.image || DEFAULT_PROFILE_IMAGE}
                     className="rounded-full h-10 w-10 "
                     alt="Avatar"
                   />
@@ -93,7 +98,10 @@ const Header = () => {
             </div>
 
            <div className="space-x-6 text-blue-600  ">
-              <button className="w-10 h-10 border border-blue-500 rounded-full" ><ChatIcon /></button>
+            <Link to={'/chat/'+ user.id} >
+              <button 
+              className="w-10 h-10 border border-blue-500 rounded-full" ><ChatIcon /></button>
+              </Link>
               <button className="w-10 h-10 border border-blue-500 rounded-full" ><NotificationsIcon /></button>
               <button onClick={handleSignout} className="w-10 h-10 border border-blue-500 rounded-full text-blue-600 cursor-pointer">
                 <ExitToAppIcon />

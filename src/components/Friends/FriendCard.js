@@ -6,6 +6,7 @@ const FriendCard = ({ name, image, buttonName, sendDataToParent  }) => {
    const handleRequest = (data) => {
     sendDataToParent(data)
    } 
+   
   
   return (
     <div className="p-2  flex justify-around">

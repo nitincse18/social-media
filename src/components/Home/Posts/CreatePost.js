@@ -3,9 +3,11 @@ import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import VideoCallSharpIcon from '@material-ui/icons/VideoCallSharp';
 import InsertEmoticonSharpIcon from '@material-ui/icons/InsertEmoticonSharp';
 import CreatePostForm from './CreatePostForm';
+import { postList } from "../../../services/postService";
 
 const CreatePost = () => {
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const [posts, setPosts] = useState()
 
   const openPopup = () => {
     setPopupOpen(true);
@@ -14,6 +16,12 @@ const CreatePost = () => {
   const closePopup = () => {
     setPopupOpen(false);
   };
+
+  const getPostList = async () => {
+    const postRes = await postList();
+    setPosts(postRes);
+  };
+
   return (
     <div className='h-36 mt-6 rounded-md border p-2 bg-gray-100'>
         <div className=''>
@@ -30,7 +38,7 @@ const CreatePost = () => {
 
             {isPopupOpen && (
               <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-500 bg-opacity-70 z-20">
-                 <CreatePostForm fn={closePopup} sendDataToParent={()=>setPopupOpen(false)}  />
+                 <CreatePostForm fn={closePopup} sendDataToParent={()=>setPopupOpen(false)} onAddPost={getPostList} />
               </div>
             )}
         </div>
