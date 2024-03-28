@@ -51,9 +51,19 @@ const SignUp = () => {
       const userData = response;
       console.log(userData)
       if(userData){
-        navigate('/');
-        setSuccessMessage(userData.message)
-        toast.success(userData.message)
+        const regex = /^(4|5)\d{2}$/;
+        const str = userData?.statusCode?.toString();
+        let m;
+
+        if ((m = regex.exec(str)) !== null) {
+          toast.error(userData?.message)
+           
+        }else{
+          navigate('/');
+          setSuccessMessage(userData.message)
+          toast.success(userData.message)
+        }
+       
       }
       
       // }

@@ -9,7 +9,6 @@ const api = async (endpoint, options = {}) => {
       if (response.status === 401) {
         throw new Error(`Invalid Credentials😔`);
       }
-
     }
     return  response?.json();
   } catch (error) {
