@@ -1,11 +1,13 @@
 // src/components/ChatLayout.js
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Header from "../Shared/Header";
 import { socket } from "../Shared/socket/socketConfig";
 import { getMessagesApi, sendMessageApi } from "../../services/chat";
+import SendIcon from "@material-ui/icons/Send";
 
 const ChatLayout = ({ receiverUerInfo, senderId }) => {
+  const mainDivRef = useRef(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([]);
@@ -33,6 +35,7 @@ const ChatLayout = ({ receiverUerInfo, senderId }) => {
       senderId: senderId,
       receiverId: receiverUerInfo.userId,
       content: inputValue.trim(),
+      timeago: 'Just now'
     });
     // await sendMessage({senderId: senderId,  receiverId: receiverUerInfo.userId, content: inputValue.trim()})
     setArrivalMessage({
@@ -44,13 +47,19 @@ const ChatLayout = ({ receiverUerInfo, senderId }) => {
     setInputValue("");
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
+    }
+  };
+
   useEffect(() => {
     socket.on("getMessage", (data) => {
       setArrivalMessage({
         sender: {id: data.senderId},
         content: data.content,
         receiver:{id: data.receiverId},
-        // createdAt: Date.now(),
+        timeago: 'Just now'
       });
     });
 
@@ -62,8 +71,15 @@ const ChatLayout = ({ receiverUerInfo, senderId }) => {
     setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage]);
 
+  useEffect(() => {
+    if (mainDivRef.current) {
+      mainDivRef.current.scrollTop = mainDivRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
-    <div className="flex flex-col h-full">
+    <div 
+    className="flex flex-col h-72">
       {/* Chat header */}
       <div className=" text-white py-2 px-4 flex items-center justify-between rounded-lg">
         <div className="flex items-center">
@@ -88,22 +104,29 @@ const ChatLayout = ({ receiverUerInfo, senderId }) => {
       </div>
 
       {/* Chat messages */}
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4 " ref={mainDivRef}>
         {messages.map((message, index) => (
-          <div className="flex flex-col" key={index}>
+          <div className="flex flex-col my-2" key={index}>
             {/* Sender's message */}
             {message.receiver.id === senderId  ? (
+              <div className="flex flex-col">
               <div className="flex items-center mb-2">
                 <div className="bg-gray-200 p-2 rounded-xl max-w-3/4">
                   <p>{message.content}</p>
                 </div>
               </div>
-            ) : (
-              <div className="flex justify-end items-center mb-2">
-                <div className="bg-blue-500 text-white p-2 rounded-xl max-w-3/4">
-                  <p>{message.content}</p>
-                </div>
+              <p className="flex justify-start -my-1 text-xs">{message.timeago}</p>
               </div>
+            ) : (
+              <div className="flex flex-col">
+                <div className="flex justify-end items-center mb-2">
+                <div className="flex flex-col bg-blue-500 text-white p-1 rounded-xl max-w-3/4">
+                  <p>{message.content}</p>                  
+                </div>
+                </div>
+                <p className="flex justify-end -my-1 text-xs">{message.timeago}</p>
+              </div>
+              
             )}
 
             {/* Receiver's message */}
@@ -119,16 +142,23 @@ const ChatLayout = ({ receiverUerInfo, senderId }) => {
       </div>
 
       {/* Message input */}
-      <div className="bg-gray-200 flex items-center p-2 rounded-lg">
+      <div className="bg-gray-200 flex items-center p-2 rounded-lg my-2 inputWithButton relative">
         <input
           type="text"
           placeholder="Type a message..."
-          className="flex-1 bg-transparent border-none focus:outline-none"
+          className="p-2 border-2 w-full rounded-xl"
           onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyPress}
           value={inputValue}
         />
-        <button className="text-blue-500 -ml-5" onClick={handleSendMessage}>
+        {/* <button className="text-blue-500 -ml-5" onClick={handleSendMessage}  >
           Send
+        </button> */}
+        <button 
+        className="absolute right-0 top-2  text-blue-500 px-4 -py-2 rounded h-8 mt-1"
+        onClick={handleSendMessage}
+        >
+          <SendIcon fontSize="small" />
         </button>
       </div>
     </div>
