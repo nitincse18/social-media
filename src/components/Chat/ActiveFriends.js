@@ -19,7 +19,7 @@ const ActiveFriends = () => {
   let user = JSON.parse(localStorage.getItem("token"));
 
   const handleActiveUserClick = (userId) => {
-    setShowUserChat(true);
+    setShowUserChat(!showUserChat);
     setActiveUserId(userId === activeUserId ? null : userId);
   };
 
@@ -59,7 +59,7 @@ const ActiveFriends = () => {
     <div>
       <h1 className="font-extrabold text-gray-500">Active Friends</h1>
       {onlineUsers1.map((onlineUser, index) => (
-        <div className="p-2  rounded-xl my-2  cursor-pointer" key={index}>
+        <div className={`p-2  rounded-xl my-2  cursor-pointer ${showUserChat && onlineUser.userId !== activeUserId ? '': 'hover:shadow-xl hover:bg-slate-100'}`} key={index}>
           <div
             className="flex items-center "
             onClick={() => handleActiveUserClick(onlineUser.userId)}
@@ -73,8 +73,11 @@ const ActiveFriends = () => {
                 onlineUser.socketId && <p className={`w-2 h-2 bg-green-500 rounded-full ${onlineUser.socketId ? '-m-1': ''}`} />
               }
             </div>
-
+            <div className="flex justify-stretch">
             <h1 className="font-bold mx-2">{onlineUser.name}</h1>
+            <p className="flex justify-end text-green-500 text-end">0</p>
+            </div>
+            
           </div>
           {activeUserId === onlineUser.userId && (
             <ChatLayout receiverUerInfo={onlineUser} senderId={user.id} />
