@@ -57,3 +57,24 @@ export const sendMessageApi = async (messasge) => {
       throw error;
     }
   };
+
+  
+
+  export const updateSeenStatusApi = async (userId) => {
+    try {
+      
+      const user = JSON.parse(localStorage.getItem('token'))
+      const response = await api('/messages/update/seen_status/'+ userId, {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer '+ String(user?.token),
+          'Content-Type': 'application/json'
+        },
+        // body: JSON.stringify(messasge),
+      });
+  
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };

@@ -1,5 +1,6 @@
-const BASE_URL = 'http://localhost:4000';
-const PROD_BASE_URL='https://social-media-api-production-6a0e.up.railway.app';
+
+export let BASE_URL = 'http://localhost:4000';
+export let PROD_BASE_URL='https://social-media-api-production-6a0e.up.railway.app';
 
 const api = async (endpoint, options = {}) => {
   const url = `${PROD_BASE_URL}${endpoint}`;

@@ -35,7 +35,8 @@ const ChatLayout = ({ receiverUerInfo, senderId }) => {
       senderId: senderId,
       receiverId: receiverUerInfo.userId,
       content: inputValue.trim(),
-      timeago: 'Just now'
+      timeago: 'Just now',
+      newMsgCount: 0
     });
     // await sendMessage({senderId: senderId,  receiverId: receiverUerInfo.userId, content: inputValue.trim()})
     setArrivalMessage({
@@ -59,7 +60,8 @@ const ChatLayout = ({ receiverUerInfo, senderId }) => {
         sender: {id: data.senderId},
         content: data.content,
         receiver:{id: data.receiverId},
-        timeago: 'Just now'
+        timeago: 'Just now',
+        newMsgCount: 0
       });
     });
 
@@ -150,13 +152,17 @@ const ChatLayout = ({ receiverUerInfo, senderId }) => {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyPress}
           value={inputValue}
+          onClick={(e) => e.stopPropagation()}
         />
         {/* <button className="text-blue-500 -ml-5" onClick={handleSendMessage}  >
           Send
         </button> */}
         <button 
         className="absolute right-0 top-2  text-blue-500 px-4 -py-2 rounded h-8 mt-1"
-        onClick={handleSendMessage}
+        onClick={(e) => {
+          e.stopPropagation(); // Prevent event propagation
+          handleSendMessage();
+        }}
         >
           <SendIcon fontSize="small" />
         </button>
