@@ -6,48 +6,20 @@ import { Link } from "react-router-dom";
 import ChatLayout from "./ChatLayout";
 import { getConversationListApi, updateSeenStatusApi } from "../../services/chat";
 import { find, uniqBy } from "lodash";
+import useActiveFriend from "../../hooks/chat/useActiveFriend";
 // import { io } from "socket.io-client";
 
-// const  mergeArrays = (onlineUsers, conversationList) =>{
-//   console.log('conversationList->', conversationList)
-//   const mergedArray = [];
-
-//   // Add all users from onlineUsers
-//   onlineUsers.forEach(user => {
-//       const { userId, name, socketId, img } = user;
-//       mergedArray.push({
-//           userId,
-//           name,
-//           img,
-//           isOnline: !!socketId,
-//           newMsgCount: 0
-//       });
-//   });
-
-//   // Add objects from conversationList regardless of newMsgCount
-//   conversationList.forEach(conversation => {
-//       const { userId, name, socketId, newMsgCount, img } = conversation;
-//       const existsInMergedArray = mergedArray.some(item => item.userId === userId);
-      
-//       if (!existsInMergedArray) {
-//           mergedArray.push({
-//               userId,
-//               name,
-//               img,
-//               isOnline: !!socketId,
-//               newMsgCount
-//           });
-//       }
-//   });
-
-//   return mergedArray;
-// }
 
 const ActiveFriends =  () => {
-  const [onlineUsers, setOnlineUsers] = useState([]);
-  const [showUserChat, setShowUserChat] = useState(false);
-  const [activeUserId, setActiveUserId] = useState(null);
-  const [conversationList, setConversationList] = useState([]);
+  const {
+    onlineUsers,
+    activeUserId,
+    setActiveUserId,
+    showUserChat,
+    setShowUserChat,
+    updateSeenStatus,
+    conversationList,
+  } = useActiveFriend();
   let user = JSON.parse(localStorage.getItem("token"));
 
   const handleActiveUserClick = (userId) => {
@@ -57,25 +29,6 @@ const ActiveFriends =  () => {
     !showUserChat && updateSeenStatus(userId === activeUserId ? null : userId)
   };
 
-  const updateSeenStatus =async (userId) => {
-    await updateSeenStatusApi(userId)
-  }
-
-  const getConvertation =async () => {
-    const usersList = await getConversationListApi();
-    console.log("usersList", usersList);
-    setConversationList(usersList);
-  }
-
-  useEffect( () => {
-    console.log("message");
-    socket.emit("addUser", user.id);
-    socket?.on("getUsers", (users) => {
-      console.log("online users", users);
-      setOnlineUsers(users);
-    });
-    getConvertation()
-  }, []);
 
   const mergedArray = [];
 

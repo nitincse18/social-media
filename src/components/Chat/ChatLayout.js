@@ -85,12 +85,6 @@ const ChatLayout = ({ receiverUerInfo, senderId }) => {
       {/* Chat header */}
       <div className=" text-white py-2 px-4 flex items-center justify-between rounded-lg">
         <div className="flex items-center">
-          {/* <img
-            src={receiverUerInfo.img}
-            alt="Profile"
-            className="h-8 w-8 rounded-full mr-2"
-          /> */}
-          {/* <h1 className="font-semibold">{receiverUerInfo.name}</h1> */}
         </div>
         <div>
           <button className="text-white focus:outline-none">
@@ -130,15 +124,6 @@ const ChatLayout = ({ receiverUerInfo, senderId }) => {
               </div>
               
             )}
-
-            {/* Receiver's message */}
-            {/* {message.receiver.id === receiverUerInfo.userId && <div className="flex justify-end items-center mb-2">
-              <div className="bg-blue-500 text-white p-2 rounded-xl max-w-3/4">
-                <p>{ message.content}</p>
-              </div>
-            </div>} */}
-
-            {/* Add more messages as needed */}
           </div>
         ))}
       </div>
