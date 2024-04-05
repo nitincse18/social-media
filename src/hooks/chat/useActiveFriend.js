@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getConversationListApi, updateSeenStatusApi } from "../../services/chat";
 import { socket } from "../../components/Shared/socket/socketConfig";
-import { debounce } from "lodash";
+import { debounce, uniqBy } from "lodash";
 
 const useActiveFriend = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -9,25 +9,32 @@ const useActiveFriend = () => {
   const [activeUserId, setActiveUserId] = useState(null);
   const [showUserChat, setShowUserChat] = useState(false);
   const [shouldFetchConversation, setShouldFetchConversation] = useState(true);
+  const [chatCount, setChatCount] = useState(0)
   let user = JSON.parse(localStorage.getItem("token"));
-
+    
   const updateSeenStatus = async (userId) => {
     await updateSeenStatusApi(userId);
   };
 
   const getConvertation = async () => {
-    const usersList = await getConversationListApi();
-    setConversationList(usersList);
+    const conversations = await getConversationListApi();
+    setConversationList(conversations.data);
+    setChatCount(conversations.totalMsgCount)
     setShouldFetchConversation(false);
   };
 
     // Debounce the getConvertation function to prevent excessive API calls
-    const debouncedGetConvertation = debounce(getConvertation, 500);
+    // const debouncedGetConvertation = debounce(getConvertation, 500);
+  // const sendCountsToHeader = () => {
+  //   sendDataToHeader({chatCount})
+  // }
 
   useEffect(() => {
-    socket.emit("addUser", user.id);
+    socket.emit("addUser", user?.id);
     socket?.on("getUsers", (users) => {
+      users =uniqBy(users, (user) => user.userId)
       setOnlineUsers(users);
+      // sendCountsToHeader()
     });
 
     socket.on("getMessage", (message) => {
@@ -35,11 +42,14 @@ const useActiveFriend = () => {
       const updatedConversationList = conversationList.map((conversation) => {
         if (conversation.userId === senderId) {
           conversation.newMsgCount++;
+          setChatCount(chatCount+1)
         }
         return conversation;
       });
+
       setConversationList(updatedConversationList);
       setShouldFetchConversation(true);
+      setChatCount(chatCount)
     });
 
      // Call the debounced function instead of getConvertation directly
@@ -52,7 +62,7 @@ const useActiveFriend = () => {
       socket.off("getMessage");
     };
   }, [shouldFetchConversation]);
-
+  console.log('chatCount is ==', chatCount)
   return {
     onlineUsers,
     activeUserId,
@@ -61,6 +71,7 @@ const useActiveFriend = () => {
     setShowUserChat,
     updateSeenStatus,
     conversationList,
+    chatCount
   };
 };
 

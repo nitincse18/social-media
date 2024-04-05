@@ -4,9 +4,10 @@ export let PROD_BASE_URL='https://social-media-api-production-6a0e.up.railway.ap
 
 const api = async (endpoint, options = {}) => {
   const url = `${PROD_BASE_URL}${endpoint}`;
+  const user = JSON.parse(localStorage.getItem("token"))
   try {
     const response = await fetch(url, options);
-    if (!response.ok) {
+    if (!response.ok && user) {
       if (response.status === 401) {
         throw new Error(`Invalid Credentials😔`);
       }

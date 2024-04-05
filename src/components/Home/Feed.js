@@ -44,7 +44,7 @@ const Feed = () => {
             <Outlet />
           </div>
           <div className="w-1/2 md:w-1/3 lg:w-1/6 p-4  border border-gray-100">
-            <ActiveFriends />
+            {/* <ActiveFriends /> */}
           </div>
           <div className="w-1/2 md:w-1/3 lg:w-1/6 p-4">
             
