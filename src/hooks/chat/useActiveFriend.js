@@ -9,7 +9,8 @@ const useActiveFriend = () => {
   const [activeUserId, setActiveUserId] = useState(null);
   const [showUserChat, setShowUserChat] = useState(false);
   const [shouldFetchConversation, setShouldFetchConversation] = useState(true);
-  const [chatCount, setChatCount] = useState(0)
+  const [chatCount, setChatCount] = useState(0);
+  const [usrMsgCount, setUsrMsgCount] = useState(0)
   let user = JSON.parse(localStorage.getItem("token"));
     
   const updateSeenStatus = async (userId) => {
@@ -62,7 +63,7 @@ const useActiveFriend = () => {
       socket.off("getMessage");
     };
   }, [shouldFetchConversation]);
-  console.log('chatCount is ==', chatCount)
+  
   return {
     onlineUsers,
     activeUserId,

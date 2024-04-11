@@ -21,7 +21,6 @@ const ActiveFriends = ({isVisible }) => {
   const handleActiveUserClick = (userId) => {
     setShowUserChat(!showUserChat);
     setActiveUserId(userId === activeUserId ? null : userId);
-
     !showUserChat && updateSeenStatus(userId === activeUserId ? null : userId);
   };
 

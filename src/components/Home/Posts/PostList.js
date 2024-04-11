@@ -17,7 +17,8 @@ const PostList = () => {
   const { theme } = useTheme();
   const [showComments, setShowComments] = useState(false);
   const [posts, setPosts] = useState([]);
-
+  const loggedInUser = JSON.parse(localStorage.getItem('token'));
+  console.log('loggedInUser', loggedInUser)
   const toggleComments = (postId) => {
     setShowComments((prev) => ({
       ...prev,
@@ -125,6 +126,7 @@ const PostList = () => {
                     postId={post.id}
                     comments={post?.comments}
                     user={post.user}
+                    loggedInUser={loggedInUser}
                   />
                 )}
               </div>

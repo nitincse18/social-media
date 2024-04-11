@@ -12,9 +12,12 @@ import { logout } from '../../services/authService';
 import { socket } from "./socket/socketConfig";
 import { removeOnlineUser } from "../../utils/globals";
 import { DEFAULT_PROFILE_IMAGE } from "../../utils/constant";
-import NotificationList from "./NotificationList";
+import NotificationList from "../Notification/NotificationList";
 import ActiveFriends from "../Chat/ActiveFriends";
 import useActiveFriend from "../../hooks/chat/useActiveFriend";
+import { getNotificationListApi } from "../../services/notificationService";
+import { getConversationListApi } from "../../services/chat";
+import useNotificationList from "../../hooks/notification/useNotificationList";
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
@@ -27,6 +30,7 @@ const Header = () => {
   const user = JSON.parse(localStorage.getItem('token'));
 
   let {chatCount, conversationList} = useActiveFriend();
+  let {notificationCount, notifications} = useNotificationList()
 
   console.log('chatCount Header', chatCount)
   const handleSignout =async () => {
@@ -47,10 +51,18 @@ const Header = () => {
     if(button === 'chat'){
       setShowChats(!showChats);
       setShowNotifications(false)
+      if(!showChats){
+        await getConversationListApi()
+      }
+      
     }
     if(button === 'notification'){
       setShowChats(false);
-      setShowNotifications(!showNotifications)
+      setShowNotifications(!showNotifications);
+      if(!showNotifications){
+        await getNotificationListApi()
+      }
+      
     }
     
     
@@ -67,15 +79,13 @@ const Header = () => {
             photoURL: photoURL,
           })
         );
-        setIsLoggedIn(true)
-        // navigate("/home");
+        setIsLoggedIn(true);
       } else {
         socket.on("disconnect", () => { // Fire when socket is disconnected
           console.log("Socket disconnected");
         });
         dispacth(removeUser());
-       
-        // navigate("/");
+
       }
 
   }, []);
@@ -138,7 +148,7 @@ const Header = () => {
                 onClick={() => handleButtonClicked('notification')} // Toggle notification list visibility
               >
                 <NotificationsIcon />
-                {1 > 0 && <span className="bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center absolute -top-1 -right-1">{4}</span>}
+                {notificationCount > 0 && <span className="bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center absolute -top-1 -right-1">{notificationCount}</span>}
               </button>
               <button onClick={handleSignout} className="w-10 h-10 border border-blue-500 rounded-full text-blue-600 cursor-pointer">
                 <ExitToAppIcon />

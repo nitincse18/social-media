@@ -1,26 +1,16 @@
 // src/components/ChatLayout.js
 
 import React, { useEffect, useState, useRef } from "react";
-import Header from "../Shared/Header";
 import { socket } from "../Shared/socket/socketConfig";
 import { getMessagesApi, sendMessageApi } from "../../services/chat";
 import SendIcon from "@material-ui/icons/Send";
 
 const ChatLayout = ({ receiverUerInfo, senderId }) => {
   const mainDivRef = useRef(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [currentChat, setCurrentChat] = useState(receiverUerInfo);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  // const sendMessage = async ({ senderId, receiverId, content }) => {
-  //   await sendMessageApi({ senderId, receiverId, content });
-  // };
 
   const getMessages = async ({ senderId, receiverId }) => {
     const messageList = await getMessagesApi({ senderId, receiverId });

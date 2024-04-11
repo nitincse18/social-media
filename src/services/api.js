@@ -7,6 +7,7 @@ const api = async (endpoint, options = {}) => {
   const user = JSON.parse(localStorage.getItem("token"))
   try {
     const response = await fetch(url, options);
+    console.log(response, 'user', user)
     if (!response.ok && user) {
       if (response.status === 401) {
         throw new Error(`Invalid Credentials😔`);

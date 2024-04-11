@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import SendIcon from "@material-ui/icons/Send";
 import { createComment } from "../../../services/postService";
 import { DEFAULT_PROFILE_IMAGE } from "../../../utils/constant";
+import { socket } from "../../Shared/socket/socketConfig";
 
-const CommentView = ({postId, comments, user}) => {
+const CommentView = ({postId, comments, user, loggedInUser}) => {
   const [content, setContent] = useState('');
   const [error, setError] = useState('');
-
+  const [arrivalNotification, setArrivalNotification] = useState(null);
+  
   const commentPost = async(e) => {
     e.preventDefault();
 
@@ -15,11 +17,31 @@ const CommentView = ({postId, comments, user}) => {
       return;
     }
     const comment = await createComment({content, post_id: postId});
-    console.log('comment',comment)
+
+    loggedInUser.id != user.id && socket.emit("sendNotification", {
+      senderId: loggedInUser.id,
+      receiverId: user.id,
+      content: content,
+      content_id: postId,
+      title: `User is commented on your post`,
+      type: 'post', 
+      timeago: 'Just now',
+      newMsgCount: 0
+    });
+    setArrivalNotification({
+      sender: {id: loggedInUser.id},
+      receiver: {id: user.id},
+      content: content,
+      title: `${loggedInUser.first_name} is commented on your post`,
+      type: 'post',
+
+    })
+
     setError('');
     
     // Optionally, clear the form fields after submission
     setContent('');
+    
   }
   return (
     <div className="flex flex-col mt-2">
@@ -44,12 +66,12 @@ const CommentView = ({postId, comments, user}) => {
             comments.map(comment=> (
                 <div className="flex my-1">
                     <img 
-                    src={user.image || DEFAULT_PROFILE_IMAGE} 
+                    src={comment.user.image || DEFAULT_PROFILE_IMAGE} 
                     alt=''
                     className='m-2 p-2 h-14 w-14 rounded-full'
                     />
                     <div className='flex flex-col border bg-white w-full '>
-                    <h1 className='mt-2 text-blue-400 mx-2'>{user.first_name} {user.last_name}<span className='text-xs font-light text-black'> 2 hours ago </span> </h1>
+                    <h1 className='mt-2 text-blue-400 mx-2'>{comment.user.first_name} {comment.user.last_name}<span className='text-xs font-light text-black'> {comment.timeago} </span> </h1>
                     <p className='text-xs font-light text-gray-500 mx-2 mb-2'>{comment.content}</p>
                     </div>
                 </div>
