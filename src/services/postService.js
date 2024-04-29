@@ -2,7 +2,7 @@ import api from './api';
 
 export const createPost = async (postData, file) => {
   try {
-    console.log('postData', JSON.stringify(postData.entries()), file)
+    // console.log('postData', JSON.stringify(postData.entries()), file)
     const user = JSON.parse(localStorage.getItem('token'))
     const response = await api('/posts', {
       method: 'POST',
@@ -49,6 +49,26 @@ export const createComment = async (commentBody) => {
         'Authorization': 'Bearer '+ String(user?.token)
       },
       body: JSON.stringify(commentBody),
+    });
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const likeUnlike = async (like) => {
+  try {
+    console.log(like)
+    const user = JSON.parse(localStorage.getItem('token'))
+    const response = await api('/posts/like', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+ String(user?.token)
+      },
+      body: JSON.stringify(like),
     });
 
     return response;

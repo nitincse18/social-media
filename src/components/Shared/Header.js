@@ -150,6 +150,7 @@ const Header = () => {
                 <NotificationsIcon />
                 {notificationCount > 0 && <span className="bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center absolute -top-1 -right-1">{notificationCount}</span>}
               </button>
+              
               <button onClick={handleSignout} className="w-10 h-10 border border-blue-500 rounded-full text-blue-600 cursor-pointer">
                 <ExitToAppIcon />
               </button>

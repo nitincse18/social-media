@@ -17,6 +17,7 @@ const CommentView = ({postId, comments, user, loggedInUser}) => {
       return;
     }
     const comment = await createComment({content, post_id: postId});
+ 
 
     loggedInUser.id != user.id && socket.emit("sendNotification", {
       senderId: loggedInUser.id,

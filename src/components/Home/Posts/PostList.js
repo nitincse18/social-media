@@ -7,7 +7,7 @@ import CommentOutlinedIcon from "@material-ui/icons/CommentOutlined";
 import ShareOutlinedIcon from "@material-ui/icons/ShareOutlined";
 import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
 import CommentView from "./CommentView";
-import { postList } from "../../../services/postService";
+import { likeUnlike, postList } from "../../../services/postService";
 import VideoPlayer from "./VideoPlayer";
 import { DEFAULT_PROFILE_IMAGE } from "../../../utils/constant";
 import { useTheme } from "../../../utils/ThemeContext";
@@ -17,6 +17,7 @@ const PostList = () => {
   const { theme } = useTheme();
   const [showComments, setShowComments] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [isLike, setIsLike] = useState(false);
   const loggedInUser = JSON.parse(localStorage.getItem('token'));
   console.log('loggedInUser', loggedInUser)
   const toggleComments = (postId) => {
@@ -31,6 +32,13 @@ const PostList = () => {
     setPosts(postRes);
   };
 
+
+  const likeUnlikeFun = async (post_id) => {
+    const likeRes = await likeUnlike({post_id});
+    setIsLike(likeRes.isLiked);
+    const postRes = await postList();
+    setPosts(postRes);
+  };
   useEffect(() => {
     getPostList();
     // setInterval(() =>{
@@ -94,7 +102,7 @@ const PostList = () => {
                 </div>
                 <div className="flex items-center mr-4">
                   <GradeOutlinedIcon fontSize="small" />
-                  <span className="ml-1 mb-3 text-black">10</span>
+                  <span className="ml-1 mb-3 text-black">{post.likeCount}</span>
                 </div>
                 <div className="flex items-center mr-4">
                   <ShareOutlinedIcon fontSize="small" />
@@ -102,10 +110,14 @@ const PostList = () => {
                 </div>
               </div>
               <div className="flex mt-2 ">
-                <button className="p-2 bg-gray-600 rounded-lg m-2 hover:bg-blue-400 cursor-pointer">
+                <button 
+                className={`p-2 ${ post.isLiked ? 'bg-red-700' : 'bg-gray-600'}  rounded-lg m-2 cursor-pointer hover:bg-blue-400 `}
+                onClick={() => likeUnlikeFun(post.id)}
+                >
                   <ThumbUpAltOutlinedIcon fontSize="small" />
                   Like
                 </button>
+
                 <button
                   onClick={() => toggleComments(post.id)}
                   className="p-2 bg-gray-600 rounded-lg m-2 hover:bg-blue-400 cursor-pointer"
