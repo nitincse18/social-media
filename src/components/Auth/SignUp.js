@@ -26,13 +26,13 @@ const SignUp = () => {
     <div>
       <Header />
       <div
-        className="flex fixed w-full"
+        className="flex fixed w-full h-full"
         style={{
           background: theme === "light" ? "#fff" : "#333",
           color: theme === "light" ? "#333" : "#fff",
         }}
       >
-        <div className=" w-auto p-12 my-6 mx-auto right-0 left-0 shadow-lg rounded-lg bg-opacity-80">
+        <div className=" w-auto p-12 my-6 mx-auto right-0 left-0 shadow-md rounded-lg bg-opacity-80">
           <h1 className="font-extrabold text-lg text-blue-700 text-center">
             <LockIcon />
             Create an Account
@@ -40,8 +40,8 @@ const SignUp = () => {
           <p className="text-gray-400 text-center mx-2 px-2 mb-4">
             Its quick and Easy
           </p>
-          <div className="flex relative justify-center">
-            <form>
+          <div className="flex justify-center relative">
+            <form className="w-auto h-full">
               <div className="flex justify-center">
                 <input
                   type="text"
