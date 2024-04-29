@@ -37,7 +37,7 @@ const Login = () => {
           />
 
           <div className="mx-auto flex md:mt-auto ml-20 md:ml-0">
-            <form className="flex flex-col items-center mt-40">
+            <form className="flex flex-col  mt-40">
               <h1 className="font-extrabold text-blue-600">
                 <PersonIcon /> Login
               </h1>
@@ -45,7 +45,7 @@ const Login = () => {
                 type="text"
                 placeholder="Email Address *"
                 required
-                className="border border-black m-2 p-2 rounded-xl w-96 md:w-auto"
+                className="border border-black m-2 p-2 rounded-xl w-auto md:w-auto "
                 onChange={(e) => setEmail(e.target.value)}
               />
 
@@ -54,14 +54,14 @@ const Login = () => {
                 placeholder="Password *"
                 autoComplete="on"
                 required
-                className="border border-black m-2 p-2 rounded-xl w-96 md:w-auto"
+                className="border border-black m-2 p-2 rounded-xl w-auto md:w-auto"
                 onChange={(e) => setPassword(e.target.value)}
               />
 
               <div className="flex justify-end">
                 <button
                   onClick={(e) => handleLogin(e)}
-                  className="border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-24 hover:bg-blue-600"
+                  className="border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-auto hover:bg-blue-600"
                 >
                   Login
                 </button>
@@ -70,7 +70,7 @@ const Login = () => {
               <hr />
               <div className="flex items-center">
                 <Link to="/sign-up">
-                  <button className="border border-green-950 rounded-xl mx-24 my-2 p-2 bg-green-400 w-48 hover:bg-green-700">
+                  <button className="border border-green-950 rounded-xl mx-24 my-2 p-2 bg-green-400 w-auto hover:bg-green-700">
                     Create Account
                   </button>
                 </Link>
