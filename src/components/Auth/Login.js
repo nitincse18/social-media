@@ -6,22 +6,21 @@ import { Link } from "react-router-dom";
 import Header from "../Shared/Header";
 import useLogin from "../../hooks/useLogin";
 
-
 const Login = () => {
   const { theme } = useTheme();
-  const {  setEmail, setPassword, handleLogin } = useLogin();
+  const { setEmail, setPassword, handleLogin } = useLogin();
 
   return (
     <div>
-      <Header  />
+      <Header />
       <div
-        className="flex fixed w-full"
+        className="flex fixed w-full h-screen"
         style={{
-          background: theme === "light" ? "#fff" : "#333",
-          color: theme === "light" ? "#333" : "#fff",
+          background: theme === 'light' ? '#fff' : '#333',
+          color: theme === 'light' ? '#333' : '#fff',
         }}
       >
-        <div className="flex-1 ">
+        <div className="md:flex-1 hidden md:block h-screen">
           <Slider />
         </div>
 
@@ -29,43 +28,40 @@ const Login = () => {
           <img
             src="https://wpkixx.com/html/socimo/images/star-shape.png"
             alt="Diagonal Corner Image"
-            className={`absolute -top-20 right-20 transform translate-x-1/2 translate-y-1/2 w-36 h-36 `}
+            className="absolute -top-20 right-20 transform translate-x-1/2 translate-y-1/2 w-36 h-36"
           />
           <img
             src="https://wpkixx.com/html/socimo/images/mockup.png"
             alt="Diagonal Corner Image"
-            className={`absolute -bottom-24 left-20 transform -translate-x-1/2 -translate-y-1/2 w-56 h-56 `}
+            className="absolute -bottom-24 left-20 transform -translate-x-1/2 -translate-y-1/2 w-56 h-56"
           />
 
-          <div className="mx-auto flex mt-60 ml-20">
-            <form className="flex flex-col justify-items-start">
+          <div className="mx-auto flex md:mt-auto ml-20 md:ml-0">
+            <form className="flex flex-col items-center mt-40">
               <h1 className="font-extrabold text-blue-600">
                 <PersonIcon /> Login
               </h1>
               <input
-                // ref={email}
                 type="text"
                 placeholder="Email Address *"
                 required
-                className="border border-black m-2 p-2 rounded-xl w-96"
+                className="border border-black m-2 p-2 rounded-xl w-96 md:w-auto"
                 onChange={(e) => setEmail(e.target.value)}
               />
 
               <input
-                // ref={password}
                 type="password"
                 placeholder="Password *"
                 autoComplete="on"
                 required
-                className="border border-black m-2 p-2 rounded-xl w-96"
+                className="border border-black m-2 p-2 rounded-xl w-96 md:w-auto"
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {/* <p className="text-red-500 font-bold py-2">{errorMessage}</p> */}
 
               <div className="flex justify-end">
                 <button
-                  onClick={(e) =>handleLogin(e)}
-                  className=" border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-24 hover:bg-blue-600"
+                  onClick={(e) => handleLogin(e)}
+                  className="border border-blue-950 rounded-xl m-2 p-2 bg-blue-400 w-24 hover:bg-blue-600"
                 >
                   Login
                 </button>
@@ -73,7 +69,7 @@ const Login = () => {
 
               <hr />
               <div className="flex items-center">
-                <Link to={"/sign-up"}>
+                <Link to="/sign-up">
                   <button className="border border-green-950 rounded-xl mx-24 my-2 p-2 bg-green-400 w-48 hover:bg-green-700">
                     Create Account
                   </button>
